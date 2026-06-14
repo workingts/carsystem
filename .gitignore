@@ -1,0 +1,23 @@
+obj/
+.vs/
+*.user
+*.suo
+*.rsuser
+app.db
+*.db
+*.db-shm
+*.db-wal
+*.bak
+*.tmp
+*.msi
+.claude/
+
+# Debug / x86 빌드 제외, Release만 포함
+CAR_SYSTEM/bin/Debug/
+CAR_SYSTEM/bin/x86/
+
+# 내부 문서 / 민감 데이터
+SESSION_*.md
+PROMPT_*.md
+HANDOFF_SUMMARY.txt
+jcs-aidesk/

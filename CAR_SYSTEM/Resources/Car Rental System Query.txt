@@ -1,0 +1,45 @@
+-- 차량검사 접수 관리 시스템 DB
+-- 기반: TS 한국교통안전공단 법정양식
+
+CREATE TABLE 차주 (
+    차주번호 INT AUTO_INCREMENT PRIMARY KEY,
+    차주명 VARCHAR(100) NOT NULL,
+    연락처 VARCHAR(20) NOT NULL,
+    주소 TEXT
+);
+
+CREATE TABLE 접수 (
+    접수번호 INT AUTO_INCREMENT PRIMARY KEY,
+    차주번호 INT,
+    차량번호 VARCHAR(20) NOT NULL,
+    검사종류 ENUM('정기검사','종합검사','배출가스검사','이륜차검사') NOT NULL,
+    유종 ENUM('휘발유','경유','LPG','전기','수소','기타') NOT NULL,
+    접수일시 DATETIME NOT NULL,
+    검사완료일시 DATETIME,
+    수수료 DECIMAL(10,0) NOT NULL DEFAULT 0,
+    검사결과 ENUM('합격','불합격','보류') DEFAULT '보류',
+    진행상태 ENUM('진행중','완료') DEFAULT '진행중',
+    비고 TEXT,
+    FOREIGN KEY (차주번호) REFERENCES 차주(차주번호) ON DELETE CASCADE
+);
+
+CREATE TABLE 이륜접수 (
+    접수번호 INT AUTO_INCREMENT PRIMARY KEY,
+    차주번호 INT,
+    차량번호 VARCHAR(20) NOT NULL,
+    검사종류 ENUM('이륜차검사') NOT NULL DEFAULT '이륜차검사',
+    유종 ENUM('휘발유','전기','기타') NOT NULL,
+    접수일시 DATETIME NOT NULL,
+    검사완료일시 DATETIME,
+    수수료 DECIMAL(10,0) NOT NULL DEFAULT 0,
+    검사결과 ENUM('합격','불합격','보류') DEFAULT '보류',
+    진행상태 ENUM('진행중','완료') DEFAULT '진행중',
+    비고 TEXT,
+    FOREIGN KEY (차주번호) REFERENCES 차주(차주번호) ON DELETE CASCADE
+);
+
+CREATE TABLE Admins (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
