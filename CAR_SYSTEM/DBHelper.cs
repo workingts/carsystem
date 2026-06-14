@@ -80,6 +80,14 @@ namespace CAR_SYSTEM
                         }
                     }
                 }
+
+                // 마이그레이션: 이륜접수.유종 컬럼 제거 (기존 DB 호환)
+                try
+                {
+                    using (SqliteCommand cmd = new SqliteCommand("ALTER TABLE 이륜접수 DROP COLUMN 유종", conn))
+                        cmd.ExecuteNonQuery();
+                }
+                catch { }
             }
         }
 

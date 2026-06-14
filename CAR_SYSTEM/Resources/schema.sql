@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS 이륜접수 (
     차주번호 INTEGER,
     차량번호 TEXT NOT NULL,
     검사종류 TEXT NOT NULL DEFAULT '이륜차검사',
-    유종 TEXT NOT NULL,
     구동방식 TEXT,
     배출가스 TEXT,
     검사주기 TEXT,
