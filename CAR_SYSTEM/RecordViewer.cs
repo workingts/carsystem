@@ -163,18 +163,42 @@ namespace CAR_SYSTEM
             if (e.RowIndex < 0) return;
             var dt = dataGridView1.DataSource as DataTable;
             if (dt == null || e.RowIndex >= dt.Rows.Count) return;
-            DataRow row = dt.Rows[e.RowIndex];
-            string carNo = CryptoHelper.Decrypt(row["차량번호"].ToString());
-            string name  = CryptoHelper.Decrypt(row["차주명"].ToString());
-            string phone = CryptoHelper.Decrypt(row["연락처"].ToString());
-            MessageBox.Show(
-                "차량번호: " + carNo + "\n" +
-                "차주명:   " + name  + "\n" +
-                "연락처:   " + phone,
-                "상세정보",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+
+            DataRow row     = dt.Rows[e.RowIndex];
+            int acceptNo    = Convert.ToInt32(row["접수번호"]);
+            string inspType = row["검사종류"].ToString();
+
+            if (_isBike || inspType == "이륜차검사")
+            {
+                using (Form dlg = new Form())
+                {
+                    BikeCustomerForm edit = new BikeCustomerForm(acceptNo);
+                    edit.Dock = DockStyle.Fill;
+                    dlg.Text            = "이륜 접수 수정";
+                    dlg.BackColor       = Color.FromArgb(18, 18, 18);
+                    dlg.Size            = new Size(960, 280);
+                    dlg.StartPosition   = FormStartPosition.CenterParent;
+                    dlg.FormBorderStyle = FormBorderStyle.Sizable;
+                    dlg.Controls.Add(edit);
+                    dlg.ShowDialog(this.FindForm());
+                }
+            }
+            else
+            {
+                using (Form dlg = new Form())
+                {
+                    CustomerForm edit = new CustomerForm(acceptNo);
+                    edit.Dock = DockStyle.Fill;
+                    dlg.Text            = "자동차 접수 수정";
+                    dlg.BackColor       = Color.FromArgb(18, 18, 18);
+                    dlg.Size            = new Size(960, 280);
+                    dlg.StartPosition   = FormStartPosition.CenterParent;
+                    dlg.FormBorderStyle = FormBorderStyle.Sizable;
+                    dlg.Controls.Add(edit);
+                    dlg.ShowDialog(this.FindForm());
+                }
+            }
+            LoadRecords(txtSearch.Text.Trim());
         }
 
         private void btnFilter_Click(object sender, EventArgs e)
