@@ -29,14 +29,34 @@ namespace CAR_SYSTEM
     public partial class RecordViewer : UserControl
     {
         private DataTable _rawTable = null;
+        private bool _isBike = false;
 
         public RecordViewer()
         {
             InitializeComponent();
             dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
-            PopulateFilterComboboxes();
             SetupColumns();
             LoadRecords();
+        }
+
+        private void rdoCar_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoCar.Checked)
+            {
+                _isBike = false;
+                label1.Text = "접수 목록";
+                LoadRecords();
+            }
+        }
+
+        private void rdoBike_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rdoBike.Checked)
+            {
+                _isBike = true;
+                label1.Text = "접수 목록 (이륜)";
+                LoadRecords();
+            }
         }
 
         private void SetupColumns()
@@ -67,23 +87,11 @@ namespace CAR_SYSTEM
             col검사종류.Name = "검사종류";
             dataGridView1.Columns.Add(col검사종류);
 
-            DataGridViewTextBoxColumn col유종 = new DataGridViewTextBoxColumn();
-            col유종.DataPropertyName = "유종";
-            col유종.HeaderText = "유종";
-            col유종.Name = "유종";
-            dataGridView1.Columns.Add(col유종);
-
             DataGridViewTextBoxColumn col접수일시 = new DataGridViewTextBoxColumn();
             col접수일시.DataPropertyName = "접수일시";
             col접수일시.HeaderText = "접수일시";
             col접수일시.Name = "접수일시";
             dataGridView1.Columns.Add(col접수일시);
-
-            DataGridViewTextBoxColumn col검사완료일시 = new DataGridViewTextBoxColumn();
-            col검사완료일시.DataPropertyName = "검사완료일시";
-            col검사완료일시.HeaderText = "완료일시";
-            col검사완료일시.Name = "검사완료일시";
-            dataGridView1.Columns.Add(col검사완료일시);
 
             DataGridViewTextBoxColumn col수수료 = new DataGridViewTextBoxColumn();
             col수수료.DataPropertyName = "수수료";
@@ -97,12 +105,6 @@ namespace CAR_SYSTEM
             col검사결과.HeaderText = "검사결과";
             col검사결과.Name = "검사결과";
             dataGridView1.Columns.Add(col검사결과);
-
-            DataGridViewTextBoxColumn col진행상태 = new DataGridViewTextBoxColumn();
-            col진행상태.DataPropertyName = "진행상태";
-            col진행상태.HeaderText = "진행상태";
-            col진행상태.Name = "진행상태";
-            dataGridView1.Columns.Add(col진행상태);
 
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
@@ -119,46 +121,28 @@ namespace CAR_SYSTEM
             dataGridView1.DefaultCellStyle.SelectionForeColor = Color.Black;
         }
 
-        private void LoadRecords(string keyword = "", string filterStatus = "")
+        private void LoadRecords(string keyword = "")
         {
+            string table = _isBike ? "이륜접수" : "접수";
             string query =
                 "SELECT" +
                 " j.접수번호," +
                 " c.차주명," +
                 " j.차량번호," +
                 " j.검사종류," +
-                " j.유종," +
                 " j.접수일시," +
-                " j.검사완료일시," +
                 " j.수수료," +
                 " j.검사결과," +
-                " j.진행상태," +
                 " c.연락처" +
-                " FROM 접수 j" +
+                " FROM " + table + " j" +
                 " INNER JOIN 차주 c ON j.차주번호 = c.차주번호" +
                 " WHERE (c.차주명 LIKE @keyword OR j.차량번호 LIKE @keyword)";
 
-            if (!string.IsNullOrEmpty(filterStatus))
-                query += " AND j.진행상태 = @status";
-
             DBHelper db = new DBHelper();
-            SqliteParameter[] parameters;
-
-            if (!string.IsNullOrEmpty(filterStatus))
+            SqliteParameter[] parameters = new SqliteParameter[]
             {
-                parameters = new SqliteParameter[]
-                {
-                    new SqliteParameter("@keyword", "%" + keyword + "%"),
-                    new SqliteParameter("@status",  filterStatus)
-                };
-            }
-            else
-            {
-                parameters = new SqliteParameter[]
-                {
-                    new SqliteParameter("@keyword", "%" + keyword + "%")
-                };
-            }
+                new SqliteParameter("@keyword", "%" + keyword + "%")
+            };
 
             _rawTable = db.FetchData(query, parameters);
 
@@ -193,33 +177,14 @@ namespace CAR_SYSTEM
             );
         }
 
-        private void PopulateFilterComboboxes()
-        {
-            cmbStatusFilter.Items.Clear();
-            cmbStatusFilter.Items.Add("진행중");
-            cmbStatusFilter.Items.Add("완료");
-            cmbStatusFilter.SelectedIndex = -1;
-
-            cmbPaymentFilter.Items.Clear();
-            cmbPaymentFilter.Items.Add("미납");
-            cmbPaymentFilter.Items.Add("완료");
-            cmbPaymentFilter.SelectedIndex = -1;
-        }
-
         private void btnFilter_Click(object sender, EventArgs e)
         {
-            string keyword = txtSearch.Text.Trim();
-            string filterStatus = "";
-            if (cmbStatusFilter.SelectedItem != null)
-                filterStatus = cmbStatusFilter.SelectedItem.ToString();
-            LoadRecords(keyword, filterStatus);
+            LoadRecords(txtSearch.Text.Trim());
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             txtSearch.Clear();
-            cmbStatusFilter.SelectedIndex = -1;
-            cmbPaymentFilter.SelectedIndex = -1;
             LoadRecords();
         }
 
@@ -243,7 +208,7 @@ namespace CAR_SYSTEM
                 using (StreamWriter sw = new StreamWriter(dlg.FileName, false, Encoding.UTF8))
                 {
                     sw.Write('﻿');
-                    sw.WriteLine("접수번호,차주명,차량번호,검사종류,유종,접수일시,검사완료일시,수수료,검사결과,진행상태");
+                    sw.WriteLine("접수번호,차주명,차량번호,검사종류,접수일시,수수료,검사결과");
 
                     int i = 0;
                     for (i = 0; i < _rawTable.Rows.Count; i++)
@@ -256,12 +221,9 @@ namespace CAR_SYSTEM
                             plainName          + "," +
                             plainCarNo         + "," +
                             row["검사종류"]    + "," +
-                            row["유종"]        + "," +
                             row["접수일시"]    + "," +
-                            row["검사완료일시"]+ "," +
                             row["수수료"]      + "," +
-                            row["검사결과"]    + "," +
-                            row["진행상태"]
+                            row["검사결과"]
                         );
                     }
                 }

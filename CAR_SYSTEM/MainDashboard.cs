@@ -50,21 +50,6 @@ namespace CAR_SYSTEM
             }
         }
 
-        private void btnPayment_Click(object sender, EventArgs e)
-        {
-            using (Form frm = new Form())
-            {
-                frm.Text            = "수수료내역";
-                frm.BackColor       = Color.FromArgb(18, 18, 18);
-                frm.WindowState     = FormWindowState.Maximized;
-                frm.FormBorderStyle = FormBorderStyle.Sizable;
-                PaymentViewer pv    = new PaymentViewer();
-                pv.Dock             = DockStyle.Fill;
-                frm.Controls.Add(pv);
-                frm.ShowDialog(this);
-            }
-        }
-
         private void btnExpiry_Click(object sender, EventArgs e)
         {
             ExpiryListForm frm  = new ExpiryListForm();

@@ -24,7 +24,6 @@ namespace CAR_SYSTEM
             lblTitle   = new Label();
             flwNav     = new FlowLayoutPanel();
             btnReport   = new Button();
-            btnPayment  = new Button();
             btnExpiry   = new Button();
             btnAccount  = new Button();
             btnAbout    = new Button();
@@ -65,7 +64,6 @@ namespace CAR_SYSTEM
             flwNav.Padding       = new Padding(0, 6, 8, 0);
             flwNav.Name          = "flwNav";
             flwNav.Controls.Add(btnReport);
-            flwNav.Controls.Add(btnPayment);
             flwNav.Controls.Add(btnExpiry);
             flwNav.Controls.Add(btnAccount);
             flwNav.Controls.Add(btnAbout);
@@ -81,18 +79,6 @@ namespace CAR_SYSTEM
             btnReport.Cursor    = Cursors.Hand;
             btnReport.Name      = "btnReport";
             btnReport.Click    += btnReport_Click;
-
-            // btnPayment
-            btnPayment.Text      = "수수료내역";
-            btnPayment.Font      = new Font("Segoe UI", 9F);
-            btnPayment.ForeColor = Color.White;
-            btnPayment.BackColor = Color.FromArgb(55, 55, 85);
-            btnPayment.FlatStyle = FlatStyle.Flat;
-            btnPayment.FlatAppearance.BorderSize = 0;
-            btnPayment.Size      = new Size(88, 28);
-            btnPayment.Cursor    = Cursors.Hand;
-            btnPayment.Name      = "btnPayment";
-            btnPayment.Click    += btnPayment_Click;
 
             // btnExpiry
             btnExpiry.Text      = "만료목록";
@@ -183,7 +169,6 @@ namespace CAR_SYSTEM
         private Label           lblTitle;
         private FlowLayoutPanel flwNav;
         private Button          btnReport;
-        private Button          btnPayment;
         private Button          btnExpiry;
         private Button          btnAccount;
         private Button          btnAbout;
