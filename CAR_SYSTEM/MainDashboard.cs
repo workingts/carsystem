@@ -37,28 +37,32 @@ namespace CAR_SYSTEM
 
         private void btnReport_Click(object sender, EventArgs e)
         {
-            Form frm = new Form();
-            frm.Text            = "집계표";
-            frm.BackColor       = Color.FromArgb(18, 18, 18);
-            frm.WindowState     = FormWindowState.Maximized;
-            frm.FormBorderStyle = FormBorderStyle.Sizable;
-            ReportViewer rv     = new ReportViewer();
-            rv.Dock             = DockStyle.Fill;
-            frm.Controls.Add(rv);
-            frm.ShowDialog(this);
+            using (Form frm = new Form())
+            {
+                frm.Text            = "집계표";
+                frm.BackColor       = Color.FromArgb(18, 18, 18);
+                frm.WindowState     = FormWindowState.Maximized;
+                frm.FormBorderStyle = FormBorderStyle.Sizable;
+                ReportViewer rv     = new ReportViewer();
+                rv.Dock             = DockStyle.Fill;
+                frm.Controls.Add(rv);
+                frm.ShowDialog(this);
+            }
         }
 
         private void btnPayment_Click(object sender, EventArgs e)
         {
-            Form frm = new Form();
-            frm.Text            = "수수료내역";
-            frm.BackColor       = Color.FromArgb(18, 18, 18);
-            frm.WindowState     = FormWindowState.Maximized;
-            frm.FormBorderStyle = FormBorderStyle.Sizable;
-            PaymentViewer pv    = new PaymentViewer();
-            pv.Dock             = DockStyle.Fill;
-            frm.Controls.Add(pv);
-            frm.ShowDialog(this);
+            using (Form frm = new Form())
+            {
+                frm.Text            = "수수료내역";
+                frm.BackColor       = Color.FromArgb(18, 18, 18);
+                frm.WindowState     = FormWindowState.Maximized;
+                frm.FormBorderStyle = FormBorderStyle.Sizable;
+                PaymentViewer pv    = new PaymentViewer();
+                pv.Dock             = DockStyle.Fill;
+                frm.Controls.Add(pv);
+                frm.ShowDialog(this);
+            }
         }
 
         private void btnExpiry_Click(object sender, EventArgs e)

@@ -22,7 +22,6 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Data.Sqlite;
 
 namespace CAR_SYSTEM
 {
@@ -36,7 +35,6 @@ namespace CAR_SYSTEM
         public ExpiryListForm()
         {
             InitializeComponent();
-            EnsureColumns();
             LoadData();
         }
 
@@ -188,25 +186,6 @@ namespace CAR_SYSTEM
             PerformLayout();
         }
 
-        private void EnsureColumns()
-        {
-            DBHelper db = new DBHelper();
-            string[] tables = { "접수", "이륜접수" };
-            foreach (string tbl in tables)
-            {
-                using (SqliteConnection conn = db.GetConnection())
-                {
-                    try
-                    {
-                        conn.Open();
-                        using (SqliteCommand cmd = new SqliteCommand("ALTER TABLE " + tbl + " ADD COLUMN 유효만료일 TEXT", conn))
-                            cmd.ExecuteNonQuery();
-                    }
-                    catch { }
-                }
-            }
-        }
-
         private void LoadData()
         {
             string query =
@@ -236,26 +215,34 @@ namespace CAR_SYSTEM
 
         private void dgvExpiry_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.Value == null || e.Value == DBNull.Value) return;
             string colName = dgvExpiry.Columns[e.ColumnIndex].Name;
 
             if (colName == "차량번호")
             {
+                if (e.Value == null || e.Value == DBNull.Value) return;
                 e.Value = CryptoHelper.MaskCarNo(CryptoHelper.Decrypt(e.Value.ToString()));
                 e.FormattingApplied = true;
             }
             else if (colName == "차주명")
             {
+                if (e.Value == null || e.Value == DBNull.Value) return;
                 e.Value = CryptoHelper.MaskName(CryptoHelper.Decrypt(e.Value.ToString()));
                 e.FormattingApplied = true;
             }
             else if (colName == "연락처")
             {
+                if (e.Value == null || e.Value == DBNull.Value) return;
                 e.Value = CryptoHelper.MaskPhone(CryptoHelper.Decrypt(e.Value.ToString()));
                 e.FormattingApplied = true;
             }
             else if (colName == "DDAY")
             {
+                if (e.Value == null || e.Value == DBNull.Value)
+                {
+                    e.Value = "-";
+                    e.FormattingApplied = true;
+                    return;
+                }
                 int dday = Convert.ToInt32(e.Value);
                 if (dday > 0)
                 {
@@ -286,7 +273,9 @@ namespace CAR_SYSTEM
             string carNo = CryptoHelper.Decrypt(row["차량번호"].ToString());
             string name  = CryptoHelper.Decrypt(row["차주명"].ToString());
             string phone = CryptoHelper.Decrypt(row["연락처"].ToString());
-            int dday     = Convert.ToInt32(row["DDAY"]);
+            int dday = (row["DDAY"] == DBNull.Value)
+                ? 0
+                : Convert.ToInt32(row["DDAY"]);
             string ddayStr = dday >= 0 ? "D-" + dday.ToString() : "D+" + Math.Abs(dday).ToString();
 
             MessageBox.Show(

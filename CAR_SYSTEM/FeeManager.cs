@@ -58,25 +58,5 @@ namespace CAR_SYSTEM
             return fee;
         }
 
-        public static List<int> GetFeeList(string 검사종류, string 유종)
-        {
-            var result = new List<int>();
-            string key = 검사종류 + "_" + 유종;
-            if (수수료표.ContainsKey(key))
-            {
-                result.Add(수수료표[key]);
-            }
-            else
-            {
-                string prefix = 검사종류 + "_";
-                var seen = new HashSet<int>();
-                foreach (var kvp in 수수료표)
-                {
-                    if (kvp.Key.StartsWith(prefix) && seen.Add(kvp.Value))
-                        result.Add(kvp.Value);
-                }
-            }
-            return result;
-        }
     }
 }

@@ -78,11 +78,6 @@ namespace CAR_SYSTEM
             textBox2.UseSystemPasswordChar = !checkBoxShowPassword.Checked;
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            textBox2.UseSystemPasswordChar = !checkBoxShowPassword.Checked;
-        }
-
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

@@ -91,7 +91,6 @@ namespace CAR_SYSTEM
             textBox2.Size                   = new Size(280, 27);
             textBox2.TabIndex               = 5;
             textBox2.UseSystemPasswordChar  = true;
-            textBox2.TextChanged           += textBox2_TextChanged;
             textBox2.KeyDown               += textBox2_KeyDown;
 
             // checkBoxShowPassword
