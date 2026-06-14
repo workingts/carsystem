@@ -176,8 +176,10 @@ namespace CAR_SYSTEM
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (_rawTable == null || e.RowIndex < 0) return;
-            DataRow row = _rawTable.Rows[e.RowIndex];
+            if (e.RowIndex < 0) return;
+            var dt = dataGridView1.DataSource as DataTable;
+            if (dt == null || e.RowIndex >= dt.Rows.Count) return;
+            DataRow row = dt.Rows[e.RowIndex];
             string carNo = CryptoHelper.Decrypt(row["차량번호"].ToString());
             string name  = CryptoHelper.Decrypt(row["차주명"].ToString());
             string phone = CryptoHelper.Decrypt(row["연락처"].ToString());

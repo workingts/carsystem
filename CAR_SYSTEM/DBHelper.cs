@@ -27,7 +27,8 @@ namespace CAR_SYSTEM
     public class DBHelper
     {
         private string _dbPath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory, "app.db");
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "CAR SYSTEM", "app.db");
 
         private string GetConnectionString()
         {
@@ -41,6 +42,7 @@ namespace CAR_SYSTEM
 
         public void InitializeDatabase()
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(_dbPath));
             bool isNew = !File.Exists(_dbPath);
 
             using (SqliteConnection conn = GetConnection())

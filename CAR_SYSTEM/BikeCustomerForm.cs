@@ -33,7 +33,7 @@ namespace CAR_SYSTEM
         private void EnsureColumns()
         {
             DBHelper db = new DBHelper();
-            string[] cols = { "구동방식 TEXT", "배출가스 TEXT", "검사주기 TEXT", "결재구분 TEXT", "유효만료일 TEXT" };
+            string[] cols = { "검사주기 TEXT", "결재구분 TEXT", "유효만료일 TEXT" };
             foreach (string col in cols)
             {
                 using (SqliteConnection conn = db.GetConnection())
@@ -55,12 +55,6 @@ namespace CAR_SYSTEM
             string ownerName = txtOwnerName.Text.Trim();
             string phone     = txtPhone.Text.Trim();
 
-            string fuel = "";
-            if (cmbFuel.SelectedItem != null) fuel = cmbFuel.SelectedItem.ToString();
-            string drive = "";
-            if (cmbDrive.SelectedItem != null) drive = cmbDrive.SelectedItem.ToString();
-            string emission = "";
-            if (cmbEmission.SelectedItem != null) emission = cmbEmission.SelectedItem.ToString();
             string cycle = "";
             if (cmbCycle.SelectedItem != null) cycle = cmbCycle.SelectedItem.ToString();
             string payment = "";
@@ -72,13 +66,6 @@ namespace CAR_SYSTEM
             if (string.IsNullOrEmpty(carNo) || string.IsNullOrEmpty(ownerName) || string.IsNullOrEmpty(phone))
             {
                 MessageBox.Show("차량번호, 차주명, 연락처를 입력하세요.", "입력 오류",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(fuel))
-            {
-                MessageBox.Show("유종을 선택하세요.", "입력 오류",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -109,24 +96,21 @@ namespace CAR_SYSTEM
                     string insertDate = dtpDate.Value.ToString("yyyy-MM-dd HH:mm:ss");
 
                     string query =
-                        "INSERT INTO 이륜접수 (차주번호, 차량번호, 검사종류, 유종, 구동방식, 배출가스, 검사주기," +
+                        "INSERT INTO 이륜접수 (차주번호, 차량번호, 검사종류, 검사주기," +
                         " 접수일시, 유효만료일, 수수료, 결재구분, 진행상태, 비고)" +
-                        " VALUES (@chajuNo, @carNo, '이륜차검사', @fuel, @drive, @emission, @cycle," +
+                        " VALUES (@chajuNo, @carNo, '이륜차검사', @cycle," +
                         " @date, @expiry, @fee, @payment, '진행중', @memo)";
 
                     using (SqliteCommand cmd = new SqliteCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@chajuNo",  chajuNo);
-                        cmd.Parameters.AddWithValue("@carNo",    encCarNo);
-                        cmd.Parameters.AddWithValue("@fuel",     fuel);
-                        cmd.Parameters.AddWithValue("@drive",    drive);
-                        cmd.Parameters.AddWithValue("@emission", emission);
-                        cmd.Parameters.AddWithValue("@cycle",    cycle);
-                        cmd.Parameters.AddWithValue("@date",     insertDate);
-                        cmd.Parameters.AddWithValue("@expiry",   expiry);
-                        cmd.Parameters.AddWithValue("@fee",      fee);
-                        cmd.Parameters.AddWithValue("@payment",  payment);
-                        cmd.Parameters.AddWithValue("@memo",     memo);
+                        cmd.Parameters.AddWithValue("@chajuNo", chajuNo);
+                        cmd.Parameters.AddWithValue("@carNo",   encCarNo);
+                        cmd.Parameters.AddWithValue("@cycle",   cycle);
+                        cmd.Parameters.AddWithValue("@date",    insertDate);
+                        cmd.Parameters.AddWithValue("@expiry",  expiry);
+                        cmd.Parameters.AddWithValue("@fee",     fee);
+                        cmd.Parameters.AddWithValue("@payment", payment);
+                        cmd.Parameters.AddWithValue("@memo",    memo);
                         cmd.ExecuteNonQuery();
                     }
 
@@ -177,10 +161,7 @@ namespace CAR_SYSTEM
             txtCarNo.Clear();
             txtOwnerName.Clear();
             txtPhone.Clear();
-            cmbFuel.SelectedIndex     = -1;
-            cmbDrive.SelectedIndex    = -1;
-            cmbEmission.SelectedIndex = -1;
-            cmbCycle.SelectedIndex    = -1;
+            cmbCycle.SelectedIndex = -1;
             dtpDate.Value             = DateTime.Now;
             txtExpiry.Clear();
             cmbFee.SelectedIndex      = 0;

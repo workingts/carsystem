@@ -15,6 +15,9 @@ Source: "NOTICE.md"; DestDir: "{app}"
 Source: "README.md"; DestDir: "{app}"
 Source: "LICENSE"; DestDir: "{app}"
 
+[Dirs]
+Name: "{userappdata}\CAR SYSTEM"; Permissions: users-full
+
 [Icons]
 Name: "{group}\CAR SYSTEM"; Filename: "{app}\CAR_SYSTEM.exe"
 Name: "{commondesktop}\CAR SYSTEM"; Filename: "{app}\CAR_SYSTEM.exe"
