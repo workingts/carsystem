@@ -27,25 +27,40 @@ namespace CAR_SYSTEM
 {
     public class ExpiryListForm : Form
     {
-        private DataGridView dgvExpiry;
-        private Button btnExportCsv;
-        private Button btnClose;
-        private Label lblInfo;
+        private Panel          _topPanel;
+        private Panel          _bottomPanel;
+        private DataGridView   dgvExpiry;
+        private Button         btnExportCsv;
+        private Button         btnClose;
+        private Label          lblInfo;
+        private DateTimePicker dtpStart;
+        private DateTimePicker dtpEnd;
+        private Button         btnSearch;
+        private Label          lblTilde;
 
         public ExpiryListForm()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
             LoadData();
         }
 
         private void InitializeComponent()
         {
             DataGridViewCellStyle headerStyle = new DataGridViewCellStyle();
+            _topPanel    = new Panel();
+            _bottomPanel = new Panel();
             dgvExpiry    = new DataGridView();
             btnExportCsv = new Button();
             btnClose     = new Button();
             lblInfo      = new Label();
+            dtpStart     = new DateTimePicker();
+            dtpEnd       = new DateTimePicker();
+            btnSearch    = new Button();
+            lblTilde     = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvExpiry).BeginInit();
+            _topPanel.SuspendLayout();
+            _bottomPanel.SuspendLayout();
             SuspendLayout();
 
             // headerStyle
@@ -57,14 +72,58 @@ namespace CAR_SYSTEM
             headerStyle.SelectionForeColor = Color.White;
             headerStyle.WrapMode           = DataGridViewTriState.True;
 
-            // lblInfo
+            // lblInfo — "기간:" 레이블
             lblInfo.AutoSize  = true;
             lblInfo.Font      = new Font("Segoe UI", 10F);
             lblInfo.ForeColor = Color.LightGray;
-            lblInfo.Location  = new Point(12, 12);
+            lblInfo.Location  = new Point(8, 14);
             lblInfo.Name      = "lblInfo";
             lblInfo.TabIndex  = 3;
-            lblInfo.Text      = "조회 기준: D-90 ~ D+31 (자동)     더블클릭 → 상세보기";
+            lblInfo.Text      = "기간:";
+
+            // dtpStart
+            dtpStart.CustomFormat = "yyyy-MM-dd";
+            dtpStart.Format       = DateTimePickerFormat.Custom;
+            dtpStart.Font         = new Font("Segoe UI", 10F);
+            dtpStart.Location     = new Point(52, 10);
+            dtpStart.Size         = new Size(118, 25);
+            dtpStart.Value        = DateTime.Today.AddDays(-90);
+            dtpStart.Name         = "dtpStart";
+            dtpStart.TabIndex     = 4;
+
+            // lblTilde
+            lblTilde.AutoSize  = true;
+            lblTilde.Font      = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblTilde.ForeColor = Color.Silver;
+            lblTilde.Location  = new Point(175, 13);
+            lblTilde.Name      = "lblTilde";
+            lblTilde.TabIndex  = 5;
+            lblTilde.Text      = "~";
+
+            // dtpEnd
+            dtpEnd.CustomFormat = "yyyy-MM-dd";
+            dtpEnd.Format       = DateTimePickerFormat.Custom;
+            dtpEnd.Font         = new Font("Segoe UI", 10F);
+            dtpEnd.Location     = new Point(190, 10);
+            dtpEnd.Size         = new Size(118, 25);
+            dtpEnd.Value        = DateTime.Today.AddDays(31);
+            dtpEnd.Name         = "dtpEnd";
+            dtpEnd.TabIndex     = 6;
+
+            // btnSearch
+            btnSearch.BackColor = Color.SlateBlue;
+            btnSearch.Cursor    = Cursors.Hand;
+            btnSearch.FlatAppearance.BorderSize = 0;
+            btnSearch.FlatStyle  = FlatStyle.Flat;
+            btnSearch.Font       = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnSearch.ForeColor  = Color.White;
+            btnSearch.Location   = new Point(316, 8);
+            btnSearch.Name       = "btnSearch";
+            btnSearch.Size       = new Size(72, 30);
+            btnSearch.TabIndex   = 7;
+            btnSearch.Text       = "조  회";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click     += (s, e) => LoadData();
 
             // dgvExpiry
             dgvExpiry.AutoGenerateColumns           = false;
@@ -80,10 +139,9 @@ namespace CAR_SYSTEM
             dgvExpiry.DefaultCellStyle.SelectionForeColor = Color.White;
             dgvExpiry.EnableHeadersVisualStyles     = false;
             dgvExpiry.GridColor                     = Color.SlateBlue;
-            dgvExpiry.Location                      = new Point(12, 38);
+            dgvExpiry.Dock                          = DockStyle.Fill;
             dgvExpiry.Name                          = "dgvExpiry";
             dgvExpiry.RowHeadersVisible             = false;
-            dgvExpiry.Size                          = new Size(860, 468);
             dgvExpiry.TabIndex                      = 0;
             dgvExpiry.AutoSizeColumnsMode           = DataGridViewAutoSizeColumnsMode.Fill;
             dgvExpiry.CellFormatting               += new DataGridViewCellFormattingEventHandler(dgvExpiry_CellFormatting);
@@ -144,7 +202,7 @@ namespace CAR_SYSTEM
             btnExportCsv.FlatStyle  = FlatStyle.Flat;
             btnExportCsv.Font       = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnExportCsv.ForeColor  = Color.White;
-            btnExportCsv.Location   = new Point(12, 520);
+            btnExportCsv.Location   = new Point(8, 6);
             btnExportCsv.Name       = "btnExportCsv";
             btnExportCsv.Size       = new Size(120, 28);
             btnExportCsv.TabIndex   = 1;
@@ -153,12 +211,13 @@ namespace CAR_SYSTEM
             btnExportCsv.Click += new EventHandler(btnExportCsv_Click);
 
             // btnClose
+            btnClose.Anchor    = AnchorStyles.Top | AnchorStyles.Right;
             btnClose.BackColor = Color.DimGray;
             btnClose.FlatAppearance.BorderSize = 0;
             btnClose.FlatStyle  = FlatStyle.Flat;
             btnClose.Font       = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnClose.ForeColor  = Color.White;
-            btnClose.Location   = new Point(752, 520);
+            btnClose.Location   = new Point(752, 6);
             btnClose.Name       = "btnClose";
             btnClose.Size       = new Size(120, 28);
             btnClose.TabIndex   = 2;
@@ -166,15 +225,33 @@ namespace CAR_SYSTEM
             btnClose.UseVisualStyleBackColor = false;
             btnClose.Click += new EventHandler(btnClose_Click);
 
+            // _topPanel
+            _topPanel.BackColor = Color.FromArgb(18, 18, 18);
+            _topPanel.Dock      = DockStyle.Top;
+            _topPanel.Height    = 46;
+            _topPanel.Name      = "_topPanel";
+            _topPanel.Controls.Add(lblInfo);
+            _topPanel.Controls.Add(dtpStart);
+            _topPanel.Controls.Add(lblTilde);
+            _topPanel.Controls.Add(dtpEnd);
+            _topPanel.Controls.Add(btnSearch);
+
+            // _bottomPanel
+            _bottomPanel.BackColor = Color.FromArgb(25, 25, 25);
+            _bottomPanel.Dock      = DockStyle.Bottom;
+            _bottomPanel.Height    = 40;
+            _bottomPanel.Name      = "_bottomPanel";
+            _bottomPanel.Controls.Add(btnExportCsv);
+            _bottomPanel.Controls.Add(btnClose);
+
             // ExpiryListForm
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode       = AutoScaleMode.Font;
             BackColor           = Color.FromArgb(18, 18, 18);
             ClientSize          = new Size(884, 560);
-            Controls.Add(lblInfo);
             Controls.Add(dgvExpiry);
-            Controls.Add(btnExportCsv);
-            Controls.Add(btnClose);
+            Controls.Add(_topPanel);
+            Controls.Add(_bottomPanel);
             FormBorderStyle = FormBorderStyle.Sizable;
             MaximizeBox     = true;
             MinimizeBox     = true;
@@ -182,34 +259,42 @@ namespace CAR_SYSTEM
             StartPosition   = FormStartPosition.CenterParent;
             Text            = "검사대상차량 리스트";
             ((System.ComponentModel.ISupportInitialize)dgvExpiry).EndInit();
+            _topPanel.ResumeLayout(false);
+            _topPanel.PerformLayout();
+            _bottomPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         private void LoadData()
         {
+            string start = dtpStart.Value.ToString("yyyy-MM-dd");
+            string end   = dtpEnd.Value.ToString("yyyy-MM-dd");
+
             string query =
                 "SELECT j.접수번호, j.차량번호, c.차주명, c.연락처," +
                 " j.검사종류, j.유효만료일," +
                 " CAST((julianday(j.유효만료일) - julianday('now','localtime')) AS INTEGER) AS DDAY" +
                 " FROM 접수 j" +
                 " INNER JOIN 차주 c ON j.차주번호 = c.차주번호" +
-                " WHERE j.유효만료일 BETWEEN" +
-                " date('now','localtime','-90 days')" +
-                " AND date('now','localtime','+31 days')" +
+                " WHERE j.유효만료일 BETWEEN @start AND @end" +
                 " UNION ALL" +
                 " SELECT j.접수번호, j.차량번호, c.차주명, c.연락처," +
                 " j.검사종류, j.유효만료일," +
                 " CAST((julianday(j.유효만료일) - julianday('now','localtime')) AS INTEGER) AS DDAY" +
                 " FROM 이륜접수 j" +
                 " INNER JOIN 차주 c ON j.차주번호 = c.차주번호" +
-                " WHERE j.유효만료일 BETWEEN" +
-                " date('now','localtime','-90 days')" +
-                " AND date('now','localtime','+31 days')" +
+                " WHERE j.유효만료일 BETWEEN @start AND @end" +
                 " ORDER BY 유효만료일 ASC";
 
+            var parameters = new[]
+            {
+                new Microsoft.Data.Sqlite.SqliteParameter("@start", start),
+                new Microsoft.Data.Sqlite.SqliteParameter("@end",   end),
+            };
+
             DBHelper db = new DBHelper();
-            DataTable dt = db.FetchData(query, null);
+            DataTable dt = db.FetchData(query, parameters);
             dgvExpiry.DataSource = dt;
         }
 

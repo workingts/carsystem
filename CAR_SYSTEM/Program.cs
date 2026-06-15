@@ -29,10 +29,20 @@ namespace CAR_SYSTEM
             db.InitializeDatabase();
             db.AdminInitiate();
 
-            DisclaimerForm disclaimer = new DisclaimerForm();
-            disclaimer.ShowDialog();
-            if (!disclaimer.Accepted)
-                return;
+            string appDataDir  = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "CAR SYSTEM");
+            string acceptedFlag = Path.Combine(appDataDir, "accepted.flag");
+
+            if (!File.Exists(acceptedFlag))
+            {
+                DisclaimerForm disclaimer = new DisclaimerForm();
+                disclaimer.ShowDialog();
+                if (!disclaimer.Accepted)
+                    return;
+                Directory.CreateDirectory(appDataDir);
+                File.WriteAllText(acceptedFlag, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
 
             Application.Run(new Admin());
         }

@@ -20,7 +20,7 @@ namespace CAR_SYSTEM
 
         private void InitializeComponent()
         {
-            lblTitle   = new Label();
+            topPanel   = new Panel();
             rbCar      = new RadioButton();
             rbBike     = new RadioButton();
             lblPeriod  = new Label();
@@ -33,23 +33,15 @@ namespace CAR_SYSTEM
             btnPrint   = new Button();
             dgvSummary = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dgvSummary).BeginInit();
+            topPanel.SuspendLayout();
             SuspendLayout();
-
-            // lblTitle
-            lblTitle.AutoSize  = true;
-            lblTitle.Font      = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.White;
-            lblTitle.Location  = new Point(20, 15);
-            lblTitle.Name      = "lblTitle";
-            lblTitle.TabIndex  = 0;
-            lblTitle.Text      = "집 계 표";
 
             // rbCar
             rbCar.AutoSize  = true;
             rbCar.Checked   = true;
             rbCar.Font      = new Font("Segoe UI", 10F, FontStyle.Bold);
             rbCar.ForeColor = Color.LightSkyBlue;
-            rbCar.Location  = new Point(22, 62);
+            rbCar.Location  = new Point(12, 15);
             rbCar.Name      = "rbCar";
             rbCar.TabIndex  = 1;
             rbCar.TabStop   = true;
@@ -61,7 +53,7 @@ namespace CAR_SYSTEM
             rbBike.AutoSize  = true;
             rbBike.Font      = new Font("Segoe UI", 10F, FontStyle.Bold);
             rbBike.ForeColor = Color.LightSkyBlue;
-            rbBike.Location  = new Point(100, 62);
+            rbBike.Location  = new Point(90, 15);
             rbBike.Name      = "rbBike";
             rbBike.TabIndex  = 2;
             rbBike.Text      = "이  륜";
@@ -72,7 +64,7 @@ namespace CAR_SYSTEM
             lblPeriod.AutoSize  = true;
             lblPeriod.Font      = new Font("Segoe UI", 10F);
             lblPeriod.ForeColor = Color.Silver;
-            lblPeriod.Location  = new Point(178, 65);
+            lblPeriod.Location  = new Point(168, 17);
             lblPeriod.Name      = "lblPeriod";
             lblPeriod.TabIndex  = 3;
             lblPeriod.Text      = "기간:";
@@ -83,7 +75,7 @@ namespace CAR_SYSTEM
             cmbPeriod.Items.AddRange(new object[] { "일별", "월별", "년도별" });
             cmbPeriod.SelectedIndex     = 0;
             cmbPeriod.Font              = new Font("Segoe UI", 10F);
-            cmbPeriod.Location          = new Point(218, 60);
+            cmbPeriod.Location          = new Point(208, 12);
             cmbPeriod.Name              = "cmbPeriod";
             cmbPeriod.Size              = new Size(82, 25);
             cmbPeriod.TabIndex          = 4;
@@ -92,7 +84,7 @@ namespace CAR_SYSTEM
             lblStart.AutoSize  = true;
             lblStart.Font      = new Font("Segoe UI", 10F);
             lblStart.ForeColor = Color.Silver;
-            lblStart.Location  = new Point(310, 65);
+            lblStart.Location  = new Point(300, 17);
             lblStart.Name      = "lblStart";
             lblStart.TabIndex  = 5;
             lblStart.Text      = "시작:";
@@ -101,7 +93,7 @@ namespace CAR_SYSTEM
             dtpStart.CustomFormat = "yyyy-MM-dd";
             dtpStart.Format       = DateTimePickerFormat.Custom;
             dtpStart.Font         = new Font("Segoe UI", 10F);
-            dtpStart.Location     = new Point(347, 60);
+            dtpStart.Location     = new Point(337, 12);
             dtpStart.Name         = "dtpStart";
             dtpStart.Size         = new Size(115, 25);
             dtpStart.TabIndex     = 6;
@@ -110,7 +102,7 @@ namespace CAR_SYSTEM
             lblTilde.AutoSize  = true;
             lblTilde.Font      = new Font("Segoe UI", 11F, FontStyle.Bold);
             lblTilde.ForeColor = Color.Silver;
-            lblTilde.Location  = new Point(468, 62);
+            lblTilde.Location  = new Point(458, 15);
             lblTilde.Name      = "lblTilde";
             lblTilde.TabIndex  = 7;
             lblTilde.Text      = "~";
@@ -119,7 +111,7 @@ namespace CAR_SYSTEM
             dtpEnd.CustomFormat = "yyyy-MM-dd";
             dtpEnd.Format       = DateTimePickerFormat.Custom;
             dtpEnd.Font         = new Font("Segoe UI", 10F);
-            dtpEnd.Location     = new Point(482, 60);
+            dtpEnd.Location     = new Point(472, 12);
             dtpEnd.Name         = "dtpEnd";
             dtpEnd.Size         = new Size(115, 25);
             dtpEnd.TabIndex     = 8;
@@ -131,7 +123,7 @@ namespace CAR_SYSTEM
             btnSearch.FlatStyle  = FlatStyle.Flat;
             btnSearch.Font       = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnSearch.ForeColor  = Color.White;
-            btnSearch.Location   = new Point(607, 57);
+            btnSearch.Location   = new Point(597, 9);
             btnSearch.Name       = "btnSearch";
             btnSearch.Size       = new Size(72, 32);
             btnSearch.TabIndex   = 9;
@@ -146,13 +138,29 @@ namespace CAR_SYSTEM
             btnPrint.FlatStyle  = FlatStyle.Flat;
             btnPrint.Font       = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnPrint.ForeColor  = Color.White;
-            btnPrint.Location   = new Point(687, 57);
+            btnPrint.Location   = new Point(677, 9);
             btnPrint.Name       = "btnPrint";
             btnPrint.Size       = new Size(68, 32);
             btnPrint.TabIndex   = 10;
             btnPrint.Text       = "인  쇄";
             btnPrint.UseVisualStyleBackColor = false;
             btnPrint.Click += btnPrint_Click;
+
+            // topPanel
+            topPanel.BackColor = Color.FromArgb(28, 28, 38);
+            topPanel.Dock      = DockStyle.Top;
+            topPanel.Height    = 50;
+            topPanel.Name      = "topPanel";
+            topPanel.Controls.Add(rbCar);
+            topPanel.Controls.Add(rbBike);
+            topPanel.Controls.Add(lblPeriod);
+            topPanel.Controls.Add(cmbPeriod);
+            topPanel.Controls.Add(lblStart);
+            topPanel.Controls.Add(dtpStart);
+            topPanel.Controls.Add(lblTilde);
+            topPanel.Controls.Add(dtpEnd);
+            topPanel.Controls.Add(btnSearch);
+            topPanel.Controls.Add(btnPrint);
 
             // dgvSummary
             dgvSummary.AllowUserToAddRows            = false;
@@ -169,38 +177,29 @@ namespace CAR_SYSTEM
             dgvSummary.ColumnHeadersHeightSizeMode    = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvSummary.EnableHeadersVisualStyles      = false;
             dgvSummary.GridColor                      = Color.FromArgb(50, 50, 50);
-            dgvSummary.Location                       = new Point(10, 105);
+            dgvSummary.Dock                           = DockStyle.Fill;
             dgvSummary.Name                           = "dgvSummary";
             dgvSummary.ReadOnly                       = true;
             dgvSummary.RowHeadersVisible              = false;
             dgvSummary.RowTemplate.Height             = 26;
-            dgvSummary.Size                           = new Size(758, 415);
             dgvSummary.TabIndex                       = 11;
 
             // ReportViewer
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode       = AutoScaleMode.Font;
             BackColor           = Color.FromArgb(18, 18, 18);
-            Controls.Add(lblTitle);
-            Controls.Add(rbCar);
-            Controls.Add(rbBike);
-            Controls.Add(lblPeriod);
-            Controls.Add(cmbPeriod);
-            Controls.Add(lblStart);
-            Controls.Add(dtpStart);
-            Controls.Add(lblTilde);
-            Controls.Add(dtpEnd);
-            Controls.Add(btnSearch);
-            Controls.Add(btnPrint);
             Controls.Add(dgvSummary);
+            Controls.Add(topPanel);
             Name = "ReportViewer";
             Size = new Size(780, 530);
             ((System.ComponentModel.ISupportInitialize)dgvSummary).EndInit();
+            topPanel.ResumeLayout(false);
+            topPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
-        private Label        lblTitle;
+        private Panel        topPanel;
         private RadioButton  rbCar;
         private RadioButton  rbBike;
         private Label        lblPeriod;

@@ -64,7 +64,7 @@ namespace CAR_SYSTEM
             rdoCar.Checked   = true;
             rdoCar.Font      = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             rdoCar.ForeColor = Color.White;
-            rdoCar.Location  = new Point(140, 8);
+            rdoCar.Location  = new Point(210, 8);
             rdoCar.Name      = "rdoCar";
             rdoCar.Text      = "자동차";
             rdoCar.TabIndex  = 31;
@@ -74,7 +74,7 @@ namespace CAR_SYSTEM
             rdoBike.AutoSize  = true;
             rdoBike.Font      = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             rdoBike.ForeColor = Color.LightSkyBlue;
-            rdoBike.Location  = new Point(220, 8);
+            rdoBike.Location  = new Point(295, 8);
             rdoBike.Name      = "rdoBike";
             rdoBike.Text      = "이륜";
             rdoBike.TabIndex  = 32;

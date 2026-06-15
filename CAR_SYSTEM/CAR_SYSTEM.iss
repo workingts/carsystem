@@ -16,7 +16,7 @@ Source: "README.md"; DestDir: "{app}"
 Source: "LICENSE"; DestDir: "{app}"
 
 [Dirs]
-Name: "{userappdata}\CAR SYSTEM"; Permissions: users-full
+Name: "{userappdata}\CAR SYSTEM"; Permissions: users-full; Flags: uninsneveruninstall
 
 [Icons]
 Name: "{group}\CAR SYSTEM"; Filename: "{app}\CAR_SYSTEM.exe"
